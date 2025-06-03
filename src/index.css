@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@layer utilities {
+  @keyframes moveStarsFast {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(-25%, -25%);
+    }
+  }
+
+  @keyframes moveStarsSlow {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(-10%, -10%);
+    }
+  }
+
+  .animate-move-stars-fast {
+    animation: moveStarsFast 60s linear infinite;
+  }
+
+  .animate-move-stars-slow {
+    animation: moveStarsSlow 120s linear infinite;
+  }
+}
