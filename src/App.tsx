@@ -1,4 +1,4 @@
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useState, type JSX} from "react";
 import { Card, CardContent } from "./components/ui/Card";
 import { Button } from "./components/ui/Button";
 import { Calendar } from "./components/ui/Calendar";
@@ -20,10 +20,10 @@ interface ApodData {
 export default function NasaSkyExplorer(): JSX.Element {
   const [date, setDate] = useState<Date>(new Date());
   const [apodData, setApodData] = useState<ApodData | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<ApodData[]>([]);
-  const [showFavorites, setShowFavorites] = useState(false);
+  const [showFavorites, setShowFavorites] = useState<boolean>(false);
   const [confirmation, setConfirmation] = useState<string | null>(null);
   const [cache, setCache] = useState<Record<string, ApodData>>({});
 
@@ -64,10 +64,14 @@ export default function NasaSkyExplorer(): JSX.Element {
         const updatedCache = { ...cache, [formattedDate]: data };
         setCache(updatedCache);
         localStorage.setItem("apodCache", JSON.stringify(updatedCache));
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Failed to fetch APOD data:", err);
         setApodData(null);
-        setError(err.message || "An unexpected error occurred.");
+        if (err instanceof Error) {
+          setError(err.message || "An unexpected error occurred.");
+        } else {
+          setError("An unexpected error occurred.");
+        }
       } finally {
         setLoading(false);
       }
@@ -174,36 +178,36 @@ export default function NasaSkyExplorer(): JSX.Element {
           <div className="space-y-6">
             <div className="bg-slate-800 p-6 rounded-xl shadow-xl space-y-4">
               <h3 className="text-xl font-semibold text-white">Explore</h3>
-              <Button onClick={() => setDate(new Date())} className="w-full">
+              <Button onClick={() => setDate(new Date())} className="w-full py-1.5 text-sm">
                 Today
               </Button>
               <Button
-                onClick={() =>
-                  setDate(new Date(new Date().getTime() - Math.random() * 1000 * 60 * 60 * 24 * 10000))
-                }
-                className="w-full"
+                onClick={() => setDate(new Date(new Date().getTime() - Math.random() * 1000 * 60 * 60 * 24 * 10000))}
+                className="w-full py-1.5 text-sm"
               >
                 Random Date
               </Button>
-              <Button onClick={saveToFavorites} className="w-full">
+              <Button onClick={saveToFavorites} className="w-full py-1.5 text-sm">
                 Save to Favorites
               </Button>
-              <Button onClick={() => setShowFavorites(!showFavorites)} className="w-full">
+              <Button onClick={() => setShowFavorites(!showFavorites)} className="w-full py-1.5 text-sm">
                 {showFavorites ? "Back to Viewer" : "View Favorites"}
               </Button>
             </div>
 
             {!showFavorites && (
               <div className="bg-slate-800 p-6 rounded-xl shadow-xl">
-                <h3 className="text-xl font-semibold text-white mb-4">Pick a Date</h3>
-                <Calendar selected={date} onSelect={setDate} />
+                <h3 className="text-xl font-semibold text-white mb-4 text-center">Pick a Date</h3>
+                <div className="flex justify-center">
+                  <Calendar selected={date} onSelect={setDate} />
+                </div>
               </div>
             )}
           </div>
         </div>
 
-        <footer className="text-center text-xs text-gray-600 mt-12">
-          Data provided by NASA's Astronomy Picture of the Day API — Built by [Your Name]
+        <footer className="text-center text-xs text-gray-500 mt-12 px-4">
+          Data provided by NASA's Astronomy Picture of the Day API — Built by <span className="text-white">Thomas Brock</span>
         </footer>
       </main>
     </div>
