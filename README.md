@@ -1,54 +1,44 @@
-# React + TypeScript + Vite
+# NASA Sky Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+NASA Sky Explorer is a modern React + TypeScript web app that displays NASA's Astronomy Picture of the Day (APOD). It features a sleek animated starfield, date-based image browsing, offline caching, and favorites management — built with help from OpenAI's ChatGPT.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+* Browse the Astronomy Picture of the Day
+* Select dates with a custom calendar
+* View today's or a random APOD
+* Save favorite images to localStorage
+* Animated starfield background
+* Toast-style confirmations
+* Offline cache to avoid repeated API requests
+* Responsive layout and smooth transitions
 
-## Expanding the ESLint configuration
+## Technologies
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* React + TypeScript
+* Vite
+* Tailwind CSS
+* NASA APOD API
+* react-day-picker
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Getting Started
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. Install dependencies using `npm install`
+2. Create a `.env` file at the root with your NASA API key:
+   `VITE_NASA_API_KEY=your_api_key_here`
+3. Run the development server using `npm run dev`
+4. Open `http://localhost:5173` in your browser
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Development Notes
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+This project was developed collaboratively using OpenAI's ChatGPT to:
+
+* Implement localStorage and caching logic
+* Add loading states, error handling, and confirmation toasts
+* Resolve TypeScript types and edge cases
+* Style components with Tailwind CSS
+* Debug API time zone behavior and rate limits
+
+## License
+
+MIT © 2025 Thomas Brock
