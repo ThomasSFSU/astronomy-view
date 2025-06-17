@@ -4,9 +4,6 @@ import { Button } from "./components/ui/Button";
 import { Calendar } from "./components/ui/Calendar";
 import Starfield from "./components/Starfield";
 
-// Make sure you have added this line to your global CSS (e.g. in index.css):
-// @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap');
-
 const APOD_API_URL = "api/apod";
 const APOD_START_YEAR = 1995;
 
@@ -142,7 +139,7 @@ export default function NasaSkyExplorer(): JSX.Element {
       <Starfield />
       <main className="relative z-20 px-4 sm:px-6 py-8 font-sans">
         <h1 className="text-4xl sm:text-5xl font-extrabold text-center text-blue-400 drop-shadow mb-10" style={{ fontFamily: "Space Grotesk, sans-serif" }}>
-          Astronomy Viewer by Thomas Brock
+          Astronomy Viewer
         </h1>
         {confirmation && <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-slate-800 text-green-400 px-4 py-2 rounded shadow-lg z-50">{confirmation}</div>}
 
