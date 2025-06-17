@@ -1,10 +1,3 @@
-# .github/workflows/deploy.yml
-name: Deploy to EC2
-
-on:
-  push:
-    branches: [ main ]
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -13,16 +6,12 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Debug SSH key length
-        run: echo "${{ secrets.EC2_SSH_KEY }}" | wc -l
-
-
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.EC2_HOST }}         # set in Settings → Secrets → Actions
+          host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}      # your PEM, set as an Actions secret
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~/astronomy-view
             git pull origin main
@@ -36,5 +25,5 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            cd ~/astronomy-view
             docker-compose ps
-
