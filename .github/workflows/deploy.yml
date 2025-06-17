@@ -11,22 +11,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
+      - name: Check out repo
         uses: actions/checkout@v3
 
-      - name: Deploy via SSH
+      - name: Deploy to EC2 & rebuild frontend
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            # Go to your project
             cd ~/astronomy-view
+
+            # Pull the latest code
             git pull origin main
+
+            # Rebuild the frontend on the host
+            cd frontend
+            npm ci
+            npm run build
+            cd ..
+
+            # Recreate the containers with the new build
             docker-compose down
             docker-compose up -d --build
 
-      - name: Confirm services are up
+      - name: Verify containers
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
