@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  api:
+    image: node:18-alpine
+    working_dir: /app/backend
+    volumes:
+      - ./backend:/app/backend:cached
+      - /app/backend/node_modules
+    ports:
+      - "4000:4000"
+    environment:
+      - NASA_API_KEY=${NASA_API_KEY}
+      - CLIENT_ORIGIN=http://localhost:5173
+    command: sh -c "cd /app/backend && npm install && npx nodemon --watch server.js --exec node server.js"
+
+  frontend:
+    image: node:18-alpine
+    working_dir: /app/frontend
+    volumes:
+      - ./frontend:/app/frontend:cached
+      - /app/frontend/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE=http://host.docker.internal:4000
+    command: sh -c "cd /app/frontend && npm install && npm run dev"
