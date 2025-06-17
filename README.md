@@ -39,6 +39,9 @@ This project was developed collaboratively using OpenAI's ChatGPT to:
 * Style components with Tailwind CSS
 * Debug API time zone behavior and rate limits
 
+![Deploy to EC2](https://github.com/<your-org>/<your-repo>/actions/workflows/deploy.yml/badge.svg)
+
+
 ## License
 
 MIT © 2025 Thomas Brock

@@ -1,44 +1,36 @@
-name: CI/CD
+# .github/workflows/deploy.yml
+name: Deploy to EC2
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Build and push API image
-        uses: docker/build-push-action@v4
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.7
         with:
-          context: ./backend
-          file: ./backend/Dockerfile
-          push: false
-          tags: astronomy-api:latest
+          host: ${{ secrets.EC2_HOST }}         # set in Settings → Secrets → Actions
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}      # your PEM, set as an Actions secret
+          script: |
+            cd ~/astronomy-view
+            git pull origin main
+            docker-compose down
+            docker-compose up -d --build
 
-      - name: Build and push NGINX image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./nginx/Dockerfile   # if you have one, otherwise skip
-          push: false
-          tags: astronomy-nginx:latest
-
-      - name: SSH & Deploy to EC2
+      - name: Confirm services are up
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/astronomy-view
-            git pull origin main
-            docker-compose pull    # only if you pushed images
-            docker-compose up -d --build
+            docker-compose ps
+
