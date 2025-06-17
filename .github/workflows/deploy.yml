@@ -13,6 +13,10 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
+      - name: Debug SSH key length
+        run: echo "${{ secrets.EC2_SSH_KEY }}" | wc -l
+
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
