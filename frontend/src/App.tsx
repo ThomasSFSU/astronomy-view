@@ -132,7 +132,7 @@ export default function NasaSkyExplorer(): JSX.Element {
           className="text-4xl sm:text-5xl font-extrabold text-center text-blue-400 drop-shadow mb-10"
           style={{ fontFamily: "Space Grotesk, sans-serif" }}
         >
-          🚀 NASA Sky Explorer
+          Astronomy Viewer by Thomas Brock
         </h1>
 
         {confirmation && (
