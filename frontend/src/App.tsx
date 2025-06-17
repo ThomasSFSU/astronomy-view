@@ -4,8 +4,6 @@ import { Button } from "./components/ui/Button";
 import { Calendar } from "./components/ui/Calendar";
 import Starfield from "./components/Starfield";
 
-const API_KEY = import.meta.env.VITE_NASA_API_KEY;
-
 interface ApodData {
   date: string;
   explanation: string;
@@ -47,9 +45,7 @@ export default function NasaSkyExplorer(): JSX.Element {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(
-          `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${formattedDate}`
-        );
+        const res = await fetch(`/api/apod?date=${formattedDate}`);
         const data = await res.json();
 
         if (data.code === 429) {
