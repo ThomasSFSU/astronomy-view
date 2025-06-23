@@ -1,5 +1,10 @@
+@import "react-day-picker/dist/style.css";
 @import "tailwindcss";
 
+/* Override DayPicker’s accent variable: */
+.rdp-root {
+  --rdp-accent-color: #00ffea;
+}
 
 @layer utilities {
   @keyframes moveStarsFast {
@@ -29,12 +34,3 @@
   }
 }
 
-/* Make calendar nav arrows white */
-.react-calendar__navigation button {
-  color: white;
-}
-
-/* Make day numbers white */
-.react-calendar__tile {
-  color: white;
-}
