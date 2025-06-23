@@ -23,15 +23,16 @@ jobs:
             # Go to your project
             cd ~/astronomy-view
 
-            # Pull the latest code
-            git pull origin main
+            # Discard any local changes and sync to remote
+            git fetch origin main
+            git reset --hard origin/main
 
             # Rebuild the frontend on the host
             cd frontend
             npm ci
             npm run build
             cd ..
-            
+
             # Copy the built frontend to the appropriate location
             cp -r frontend/build/* /var/www/html/
 
