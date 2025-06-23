@@ -1,48 +1,50 @@
-# .github/workflows/deploy.yml
 name: Deploy to EC2
 
 on:
-  push:
-    branches:
-      - main
+push:
+branches:
+\- main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+deploy:
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
+```
+steps:
+  - name: Check out repo
+    uses: actions/checkout@v3
 
-      - name: Deploy to EC2 & rebuild frontend
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            # Go to your project
-            cd ~/astronomy-view
+  - name: Deploy to EC2 & rebuild frontend
+    uses: appleboy/ssh-action@v0.1.7
+    with:
+      host: ${{ secrets.EC2_HOST }}
+      username: ubuntu
+      key: ${{ secrets.EC2_SSH_KEY }}
+      script: |
+        # Go to your project directory
+        cd ~/astronomy-view
 
-            # Pull the latest code
-            git pull origin main
+        # Ensure we match remote exactly: discard local changes
+        git fetch origin main
+        git reset --hard origin/main
 
-            # Rebuild the frontend on the host
-            cd frontend
-            npm ci
-            npm run build
-            cd ..
+        # Rebuild the frontend on the host
+        cd frontend
+        npm ci
+        npm run build
+        cd ..
 
-            # Recreate the containers with the new build
-            docker-compose down
-            docker-compose up -d --build
+        # Recreate the containers with the new build
+        docker-compose down
+        docker-compose up -d --build
 
-      - name: Verify containers
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd ~/astronomy-view
-            docker-compose ps
+  - name: Verify containers
+    uses: appleboy/ssh-action@v0.1.7
+    with:
+      host: ${{ secrets.EC2_HOST }}
+      username: ubuntu
+      key: ${{ secrets.EC2_SSH_KEY }}
+      script: |
+        cd ~/astronomy-view
+        docker-compose ps
+```
