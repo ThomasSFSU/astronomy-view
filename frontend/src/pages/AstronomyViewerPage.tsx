@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, type JSX } from 'react';
+import { useState, useCallback, useMemo, type JSX } from 'react';
 import { useApod, type ApodData } from '../hooks/useApod';
 import { NasaSkyLayout } from '../components/layout/NasaSkyLayout';
 import { ApodSkeleton } from '../components/ApodSkeleton';
