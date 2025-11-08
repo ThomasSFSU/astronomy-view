@@ -1,7 +1,9 @@
 // src/hooks/useApod.ts
 import { useState, useEffect } from 'react';
 
-const APOD_API_URL = "api/apod";
+const API_BASE =
+  (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+const APOD_API_URL = `${API_BASE}/api/apod`;
 
 export interface ApodData {
   date: string;

@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy to Vercel
 
 on:
   push:
@@ -8,44 +8,27 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Deploy to EC2 & rebuild frontend
-        uses: appleboy/ssh-action@v0.1.7
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            # Go to your project
-            cd ~/astronomy-view
+          node-version: 20
 
-            # Discard any local changes and sync to remote
-            git fetch origin main
-            git reset --hard origin/main
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
 
-            # Rebuild the frontend on the host
-            cd frontend
-            npm ci
-            npm run build
-            cd ..
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
-            # Copy the built frontend to the appropriate location
-            cp -r frontend/build/* /var/www/html/
+      - name: Build Project
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-            # Recreate the containers with the new build
-            docker-compose down
-            docker-compose up -d --build
-
-      - name: Verify containers
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd ~/astronomy-view
-            docker-compose ps
+      - name: Deploy to Production
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
