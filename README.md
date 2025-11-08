@@ -27,6 +27,7 @@ NASA Sky Explorer is a modern React + TypeScript web app that displays NASA's As
 2. Create a `.env` file in the repository root that contains your NASA key (used by the serverless API function):
    ```
    NASA_API_KEY=your_api_key_here
+   MOCK_APOD_RESPONSE=false   # set to true to serve a placeholder APOD without calling NASA
    ```
 3. Install the Vercel CLI once (`npm install -g vercel`)
 4. From the project root, run `vercel dev` to start the Vite dev server and the `/api/apod` serverless function
@@ -49,6 +50,7 @@ The repository ships with `vercel.json`, an `/api/apod` serverless function, and
 1. Create a Vercel project that points to this repository.
 2. Add these environment variables in the Vercel dashboard (Production + Preview):
    * `NASA_API_KEY` – your NASA APOD key
+   * `MOCK_APOD_RESPONSE` – optional (`true` to return a mock APOD payload for testing)
 3. Store your Vercel credentials as GitHub secrets used by the workflow:
    * `VERCEL_TOKEN`
    * `VERCEL_ORG_ID`
