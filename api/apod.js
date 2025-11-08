@@ -47,44 +47,12 @@ async function handler(req, res) {
 
   const isoDate = parsedDate.toISOString().split("T")[0];
 
-  const endpoint = new URL("https://api.nasa.gov/planetary/apod");
-  endpoint.searchParams.set("api_key", apiKey);
-  endpoint.searchParams.set("date", isoDate);
-
-  try {
-    const response = await fetch(endpoint);
-    const rawBody = await response.text();
-    let payload = null;
-    try {
-      payload = rawBody ? JSON.parse(rawBody) : null;
-    } catch {
-      payload = null;
-    }
-
-    if (!response.ok) {
-      const message =
-        payload?.error ||
-        payload?.msg ||
-        payload?.message ||
-        "Unable to fetch APOD";
-      return res.status(response.status).json({ error: message });
-    }
-
-    if (!payload || typeof payload !== "object") {
-      return res
-        .status(502)
-        .json({ error: "Invalid response from NASA API" });
-    }
-
-    res.setHeader(
-      "Cache-Control",
-      "public, s-maxage=3600, stale-while-revalidate=60"
-    );
-    return res.status(200).json(payload);
-  } catch (error) {
-    console.error("APOD fetch failed:", error);
-    return res.status(500).json({ error: "Failed to reach NASA API" });
-  }
+  // Temporary short-circuit to verify serverless wiring without calling NASA.
+  return res.status(200).json({
+    message: "Serverless function reachable",
+    receivedDate: isoDate,
+    timestamp: new Date().toISOString(),
+  });
 }
 
 module.exports = handler;
